@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.itwill.mapper.AdminMapper">
+	
+	<!-- 정산 미완료 건수 -->	
+	<select id="selectnonpayCount" resultType="int">
+		select count(*) from pay where p_wstatus=0
+	</select>
+
+	
+	<!-- 정산상태 변경 --> 
+	<update id="updateadminPay">
+		update pay 
+		<set>
+			<if test="pWstatus==0 or pWstatus==9">
+				p_wstatus=#{pWstatus},
+			</if>
+		</set>
+		where p_no=#{pNo}
+	</update>
+	
+	
+	<resultMap type="SpacePayHost" id="spacePayHostResultMap">
+		<result column="rn" property="rn"/>
+		<result column="keyword" property="keyword"/>
+		<association property="pay" javaType="Pay">
+			<id column="p_no" property="pNo"/>
+			<result column="p_sno" property="pSno"/>
+			<result column="p_wdate" property="pWdate"/>
+			<result column="p_wstatus" property="pWstatus"/>
+		</association>
+		<association property="space" javaType="Space">
+			<id column="s_no" property="sNo"/>
+			<result column="s_hid" property="sHid"/>
+			<result column="s_price" property="sPrice"/>
+		</association>
+	</resultMap>
+	
+	
+	<!-- 정산 list 출력2 -->	
+	<select id="selectadminPayspaceList" resultMap="spacePayHostResultMap">
+		select * from (select rownum rn, paylist.* from (select p_no,p_sno,p_wdate,p_wstatus,s_no,s_hid,s_price from pay join space on p_sno=s_no order by p_no) paylist) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<!-- 정산 상태별 list 출력2 -->	
+	<select id="selectstatusPayspaceList" resultMap="spacePayHostResultMap">
+		select * from (select rownum rn, paylist.* from (select p_no,p_sno,p_wdate,p_wstatus,s_no,s_hid,s_price from pay join space on p_sno=s_no order by p_no) paylist) where rn between #{startRow} and #{endRow} and p_wstatus=#{pWstatus}
+	</select>
+
+	<select id="selectSearchList" parameterType="map" resultMap="spacePayHostResultMap">
+		<bind name="keyword" value="'%'+keyword+'%'"/>
+		select * from (select rownum rn, paylist.* from (select p_no,p_sno,p_wdate,p_wstatus,s_no,s_hid,s_price from pay join space on p_sno=s_no order by p_no) paylist) where rn between #{startRow} and #{endRow} and p_wstatus=#{pWstatus}
+		and s_hid=${keyword}
+	</select>
+	
+	
+</mapper>

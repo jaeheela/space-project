@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.itwill.mapper.MemberHostBoardMapper">
+	
+	
+		<!-- 호스트의 다른 공간을 출력 : SpaceList와 Host -->
+	<resultMap type="Review" id="reviewResultMap" autoMapping="true"/> 
+	<resultMap type="Pay" id="reserveResultMap" autoMapping="true"/> 
+	<resultMap type="Question" id="questionResultMap" autoMapping="true"/> 
+	<resultMap type="Member" id="memberResultMap" autoMapping="true"/>
+	<resultMap type="Host" id="hostResultMap" autoMapping="true"/>
+	
+	<resultMap type="SelectMember" id="SelectMemberResultMap" autoMapping="true">
+		<association property="member" resultMap="memberResultMap" autoMapping="true"/>
+		<association property="host" resultMap="hostResultMap" autoMapping="true"/>
+		<collection property="reviewList" resultMap="reviewResultMap" autoMapping="true"/>
+		<collection property="reserveList" resultMap="reserveResultMap" autoMapping="true"/>
+		<collection property="questionList" resultMap="questionResultMap" autoMapping="true"/>
+	</resultMap>	
+	
+	
+	
+	<!-- Review 테이블 -->
+	
+	
+	<!-- Review 게시글 삽입 -->
+		<insert id="insertReview">
+			<selectKey resultType="int" keyProperty="rNo" order="BEFORE">
+				select review_seq.nextval from dual
+			</selectKey>
+			insert into review values(#{rNo}, #{rTitle}, #{rContent}, #{rImg},1 , #{rStar},1 ,sysdate, #{rSno}, #{rMid}, #{rPno}, #{rCount})	
+	</insert>
+	
+	
+	<!-- Review 게시글 변경 (변경값이 있을 경우에만 변경) -->
+	<update id="updateReview">
+		update notice
+		<set>
+			<if test="rTitle!=null and rTitle!=''">
+				n_title=#{ntitle},
+			</if>
+			<if test="rContent!=null and rContent!=''">
+				n_content=#{ncontent},
+			</if>
+			<if test="rStatus==0 or rStatus==1">
+				n_status=#{nstatus},
+			</if>
+			<if test="rImg!=null and rImg!=''">
+				n_img=#{nimg},
+			</if>
+			<if test="rStar!=null and rStar!=''">
+				n_star=#{nStar},
+			</if>
+			<if test="rRstatus==0 or rRstatus==1">
+				n_mstatus=#{nmstatus}
+			</if>
+		</set>
+		where r_No=#{rNo}
+	</update>
+	
+	<!-- 글번호를 전달받아 Review 게시글 삭제 -->	
+	<delete id="deleteReview">
+		delete from review where r_no=#{rNo}
+	</delete>
+	
+	
+	<!-- Review 게시글 총개수 -->	
+	<select id="selectReviewCount" resultType="int">
+		select count(*) from review where r_mid=#{rMid}
+	</select>
+	
+	<!-- 글번호를 전달받아 Review 게시글 검색 -->		
+	<select id="selectReview" resultType="Review">
+		select * from review where r_no=#{rNo}
+	</select>
+	
+	
+	<!-- 최신글순으로 정렬하여 원하는 글범위의 Review list 검색 -->		
+	<select id="selectReviewList" resultMap="SelectMemberResultMap">
+		select * from (select rownum rn, reviewboard.* from (select * from Review order by r_no desc) reviewboard) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	
+	
+	<!-- Reserve 테이블 -->
+	
+
+	
+	<!-- 글번호를 전달받아 Reserve 게시글 삭제 -->	
+	<delete id="deleteReserve">
+		delete from pay where p_no=#{pNo}
+	</delete>
+	
+	
+	<!-- Reserve 게시글 총개수 -->	
+	<select id="selectReserveCount" resultType="int">
+		select count(*) from pay where p_mid=#{pMid}
+	</select>
+	
+	<!-- 최신글순으로 정렬하여 원하는 글범위의 Reserve list 검색 -->		
+	<select id="SelectReserveList" resultMap="SelectMemberResultMap">
+		select * from (select rownum rn, payboard.* from (select * from Pay order by p_no desc) payboard) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	
+	
+	
+	<!--Question 테이블 -->
+		
+		
+	<!-- Question 게시글 삽입 -->
+		<insert id="insertQuestion">
+			<selectKey resultType="int" keyProperty="qNo" order="BEFORE">
+				select question_seq.nextval from dual
+			</selectKey>
+			insert into question values(#{qNo}, #{qTitle}, #{qContent}, #{qImg},1 ,sysdate,1,#{qMid},#{qHid}, #{qSno}, #{qCount})	
+	</insert>
+	<!-- Question 게시글 변경 (변경값이 있을 경우에만 변경) -->
+	<update id="updateQuestion">
+		update question
+		<set>
+			<if test="qTitle!=null and qTitle!=''">
+				q_title=#{qTitle},
+			</if>
+			<if test="qContent!=null and qContent!=''">
+				q_content=#{qContent},
+			</if>
+			<if test="qStatus==0 or qStatus==1">
+				q_status=#{qStatus},
+			</if>
+			
+			<if test="qMstatus==0 or qMstatus==1">
+				q_mstatus=#{qMstatus}
+			</if>
+		</set>
+		where q_No=#{qNo}
+	</update>
+	
+	
+	<!-- 글번호를 전달받아 Question 게시글 삭제 -->	
+	<delete id="deleteQuestion">
+		delete from Question where q_no=#{qNo}
+	</delete>
+	
+	
+	<!-- Question 게시글 총개수 -->	
+	<select id="selectQuestionCount" resultType="int">
+		select count(*) from Question where q_mid=#{qMid}
+	</select>
+	
+	<!-- 최신글순으로 정렬하여 원하는 글범위의 Question list 검색 -->		
+	<select id="SelectQuestionList" resultMap="SelectMemberResultMap">
+		select * from (select rownum rn, questionboard.* from (select * from Question order by q_no desc) questionboard) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	
+	
+	
+	<!-- Host  -->
+	
+	<!--Host  Review -->
+	
+	<!-- Review 게시글 총개수 -->	
+	<select id="selectHostReviewCount" resultType="int">
+		select count(*) from review
+	</select>
+	
+	<!-- Review 게시글 페이징. -->
+	<select id="selectHostReviewList" resultMap="SelectMemberResultMap">
+		select * from (select rownum rn, reviewboard.* from (select * from Review order by r_no desc) reviewboard) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<!--Host Reserve -->
+	
+	<!-- Reserve 게시글 총개수 -->	
+	<select id="selectHostReserveCount" resultType="int">
+		select count(*) from pay
+	</select>
+	
+	
+	<!-- Reserve 게시글 페이징. -->
+	<select id="selectHostReserveList" resultMap="SelectMemberResultMap">
+		select * from (select rownum rn, payboard.* from (select * from Pay order by p_no desc) payboard) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<!-- Host Question-->
+	
+	<!-- Question 게시글 총개수 -->	
+	<select id="selectHostQuestionCount" resultType="int">
+		select count(*) from question
+	</select>
+	
+	
+	<!-- Question 게시글 페이징. -->
+	<select id="selectHostQuestionList" resultMap="SelectMemberResultMap">
+		select * from (select rownum rn, questionboard.* from (select * from Question order by q_no desc) questionboard) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	
+	
+	
+
+	<!-- Filter  -->
+			<!-- 사용자가 선택한 조건에 따라 동적으로 SELECT 문을 사용해 count 값 반환하는 쿼리 -->
+		<select id="selectSpaceCount" parameterType="map" resultType="int">
+		  SELECT count(*) FROM space
+		  <where>
+		   <if test="sPerson != null and sPerson != ''">
+			  AND #{sPerson} &lt;= s_person
+			</if>
+		       <if test="sCate != null and sCate != ''">
+		      AND s_cate = #{sCate}
+		      		    </if>
+		       <if test="sMap != null and sMap != ''">
+		          <!-- sMap의 값에 '%' 와일드카드 문자를 앞뒤로 추가 -->
+				    <bind name="sMap" value="'%' + sMap + '%'"/>
+				    <!-- LIKE 연산자를 사용해서 부분 일치를 검사 -->
+				    AND s_map LIKE #{sMap}
+		   	   </if>
+		       <if test="sName != null and sName != ''">
+		          <!-- sName의 값에 '%' 와일드카드 문자를 앞뒤로 추가 -->
+				    <bind name="sName" value="'%' + sName + '%'"/>
+				    <!-- LIKE 연산자를 사용해서 부분 일치를 검사 -->
+				    AND s_name LIKE #{sName}
+		   	   </if>
+		  
+		</where>
+	</select>
+	
+		<!-- 사용자가 선택한 조건에 따라 동적으로 SELECT 문을 사용해 s_no 값 반환하는 쿼리 -->
+		<select id="selectSpaceSno" parameterType="map" resultType="Space">
+		  SELECT s_no FROM space
+		  <where>
+		   <if test="sPerson != null and sPerson != ''">
+			  AND #{sPerson} &lt;= s_person
+			</if>
+		       <if test="sCate != null and sCate != ''">
+		      AND s_cate = #{sCate}
+		      		    </if>
+		       <if test="sMap != null and sMap != ''">
+		          <!-- sMap의 값에 '%' 와일드카드 문자를 앞뒤로 추가 -->
+				    <bind name="sMap" value="'%' + sMap + '%'"/>
+				    <!-- LIKE 연산자를 사용해서 부분 일치를 검사 -->
+				    AND s_map LIKE #{sMap}
+		   	   </if>
+		       <if test="sName != null and sName != ''">
+		          <!-- sName의 값에 '%' 와일드카드 문자를 앞뒤로 추가 -->
+				    <bind name="sName" value="'%' + sName + '%'"/>
+				    <!-- LIKE 연산자를 사용해서 부분 일치를 검사 -->
+				    AND s_name LIKE #{sName}
+		   	   </if>
+		</where>
+	</select>
+	
+	
+		
+		<!-- 최신글순으로 정렬하여 원하는 글범위의 space list 정렬하여 검색 -->		
+		<select id="selectSpaceList" resultType="Space">
+			select * from (select rownum rn, spaceboard.* from (select * from Space where s_no IN (
+			<foreach collection="sNoList" item="sNo" separator=",">
+				#{sNo}
+			</foreach>
+			)  <!-- 정렬 필터 -->
+				  <if test="sort != null and sort != ''">
+					  <choose>
+					    <when test="sort == 0">
+					      ORDER BY s_price ASC
+					    </when>
+					    <when test="sort == 1">
+					      ORDER BY s_price DESC
+					    </when>
+					    <when test="sort == 2">
+					      ORDER BY s_heart DESC
+					    </when>
+					    <otherwise>
+					      <!-- 정렬 방식을 지정하지 않거나 기본값으로 설정 -->
+					    </otherwise>
+					  </choose>
+				  </if>
+			) spaceboard) where rn between #{startRow} and #{endRow}
+		</select>
+	
+		
+</mapper>

@@ -1,0 +1,36 @@
+package xyz.itwill.service;
+
+import java.util.List;
+import java.util.Map;
+
+import xyz.itwill.dto.Question;
+import xyz.itwill.dto.Review;
+import xyz.itwill.dto.SelectMember;
+import xyz.itwill.exception.BoardNotFoundException;
+
+
+public interface MemberHostBoardService {
+	
+	//Member Review
+    void addReview(Review review);
+    void modifyReview(Review review) throws BoardNotFoundException;
+	void removeReview(int rNo) throws BoardNotFoundException; 
+	int getReviewCount(String rMid);
+	Review getReview(int nNo) throws BoardNotFoundException;
+	List<SelectMember> getReviewList(Map<String, Object> map);
+	
+	//Member Reserve
+	List<SelectMember> getReserveList(Map<String, Object> map);
+	int getReserveCount(String pMid);
+	
+	
+	//Member Question
+	List<SelectMember> getQuestionList(Map<String, Object> map);
+	int getQuestionCount(String qMid);
+	void addQuestion(Question question);
+	void modifyQuestion(Question question);
+	
+	
+	
+
+}
