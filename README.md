@@ -44,7 +44,8 @@
 ![space](https://github.com/jaeheela/space-project/assets/107570140/0cfc9603-1a12-4d7c-9f8f-6f47290956e8)
 
 ## 🖤화면정의서
-![space1](https://github.com/jaeheela/space-project/assets/107570140/49d2c687-9be5-41fc-ae8d-01366f5d9897)
+![space1](https://github.com/jaeheela/space-project/assets/107570140/ed677877-6b09-43b0-8870-5999039d49e8)
+![space1-1](https://github.com/jaeheela/space-project/assets/107570140/f915380f-3d76-46de-b67f-90c7a56f6a67)
 ![space2](https://github.com/jaeheela/space-project/assets/107570140/97df7564-60be-4e70-9369-5e22b45e6f49)
 ![space3](https://github.com/jaeheela/space-project/assets/107570140/637d4f21-1913-4d4c-9d28-ce2d90c2b9a4)
 ![space4](https://github.com/jaeheela/space-project/assets/107570140/76f951e4-3b18-416f-bf0b-73e30599c434)
