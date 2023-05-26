@@ -1,7 +1,6 @@
 
-# 프로젝트명
-- space project
-- 공간 대여 서비스 사이트
+# 공간 대여 서비스
+- 프로젝트명 : space moon
 - 개발인원 : 5명
 - 참고사이트 : space cloud https://www.spacecloud.kr/
 ## 🛠️Skill
