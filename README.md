@@ -41,7 +41,7 @@
 </table>
 
 ## 🖤DB설계서
-![space](https://github.com/jaeheela/space-project/assets/107570140/0cfc9603-1a12-4d7c-9f8f-6f47290956e8)
+<img width="1211" alt="image" src="https://github.com/jaeheela/space-project/assets/107570140/0673bbc0-571d-41b0-aad5-66b6352fc553">
 
 ## 🖤화면정의서
 ![space1](https://github.com/jaeheela/space-project/assets/107570140/ed677877-6b09-43b0-8870-5999039d49e8)
