@@ -229,7 +229,7 @@ public class AdminController {
 			file=new File(uploadDirectory, uploadFilename);
 		}
 
-		uploadFile.transferTo(file);
+		//uploadFile.transferTo(file);
 		
 		model.addAttribute("originalFilename", originalFilename);
 		model.addAttribute("uploadFilename", uploadFilename);

@@ -156,7 +156,7 @@ public class MemberController2 {
 						if(totalQuestion != 0) {
 							//sNo를 받아와서 출력하기 위한 객체 생성.
 							List<Space> sNo=memberHostBoardDao.selectSpaceSno(params);
-							List<Integer> sNoList = new ArrayList<>();
+							//List<Integer> sNoList = new ArrayList<>();
 							
 							for (Space space : sNo) {
 						        sNoList.add(space.getSNo());
